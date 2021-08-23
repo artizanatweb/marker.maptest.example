@@ -53,6 +53,8 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
     }
 
     obtainY(objY) {
+        objY = parseInt(objY);
+
         let y = this.scene.cameras.main.height - objY;
 
         if (0 >= (objY - this.displayHeight)) {
@@ -67,7 +69,7 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
     }
 
     obtainX(objX) {
-        let x = objX;
+        let x = parseInt(objX);
 
         if (0 >= (objX - this.displayWidth)) {
             x += this.displayWidth / 2;

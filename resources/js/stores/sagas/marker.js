@@ -63,7 +63,7 @@ export function* updateMarkerPosition(action) {
     const marker = new MarkerObject();
     marker.fill(responseMarker);
 
-    yield delay(500);
+    yield delay(100);
     yield put(storeActions.setMarkerObject(marker));
     yield put(storeActions.setMarkerLoading(false));
 }

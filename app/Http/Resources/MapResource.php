@@ -20,8 +20,8 @@ class MapResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'width' => $this->width,
-            'height' => $this->height,
+            'width' => (string) $this->width,
+            'height' => (string) $this->height,
             'marker' => new MarkerResource($this->marker),
         ];
     }

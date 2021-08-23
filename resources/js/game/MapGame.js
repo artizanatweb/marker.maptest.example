@@ -10,8 +10,8 @@ class MapGame extends Phaser.Game {
                 mode: Phaser.Scale.FIT,
                 parent: container,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
-                width: mapObject.width,
-                height: mapObject.height,
+                width: parseInt(mapObject.width),
+                height: parseInt(mapObject.height),
             },
             scene: [
                 DefaultScene,

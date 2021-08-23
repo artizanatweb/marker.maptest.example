@@ -17,8 +17,8 @@ class MarkerResource extends JsonResource
         return [
             'id' => $this->id,
             'map_id' => $this->map_id,
-            'x' => $this->x,
-            'y' => $this->y,
+            'x' => (string) $this->x,
+            'y' => (string) $this->y,
         ];
     }
 }
