@@ -3,6 +3,7 @@ import axios from "axios";
 import * as storeActions from "./../actions";
 import * as paths from "./../../utils/paths";
 import MarkerObject from "../../utils/MarkerObject";
+import {createFormErrorsObject} from "../../utils/utils";
 
 export function* changeMarkerStepSaga(action) {
     let step = action.step;
@@ -20,6 +21,15 @@ export function* changeMarkerStepSaga(action) {
 
     if (200 < step) {
         step = 200;
+    }
+
+    if (action.formErrors) {
+        let errors = { ...action.formErrors };
+
+        if (errors.hasOwnProperty("step")) {
+            delete errors["step"];
+        }
+        yield put(storeActions.setMarkerFormErrors(errors));
     }
 
     yield put(storeActions.setMarkerStep(step));
@@ -55,15 +65,24 @@ export function* updateMarkerPosition(action) {
 
     const responseMarker = responseObject?.data?.data;
     if (isError || !responseObject?.data?.success || !responseMarker) {
+        let serverMessage = responseObject?.data?.message ?? "Error encountered!";
         yield put(storeActions.setMarkerLoading(false));
-        return yield put(storeActions.setMainMessage('error', "Error encountered!"))
+
+        if (responseObject.status !== 406) {
+            const errorsObject = createFormErrorsObject(responseObject.data);
+            yield put(storeActions.setMarkerFormErrors(errorsObject));
+            yield put(storeActions.checkMarkerErrors(true));
+        }
+
+        yield put(storeActions.setMainMessage('error', serverMessage))
+        return;
     }
 
 
     const marker = new MarkerObject();
     marker.fill(responseMarker);
 
-    yield delay(100);
     yield put(storeActions.setMarkerObject(marker));
+    yield delay(500);
     yield put(storeActions.setMarkerLoading(false));
 }

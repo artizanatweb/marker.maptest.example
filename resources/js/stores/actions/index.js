@@ -27,4 +27,6 @@ export {
     changeMarkerStep,
     setMarkerStep,
     requestMarkerUpdate,
+    checkMarkerErrors,
+    setMarkerFormErrors,
 } from "./marker";

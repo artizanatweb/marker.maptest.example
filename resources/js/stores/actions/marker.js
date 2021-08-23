@@ -15,9 +15,14 @@ export const setMarkerLoading = (loading = false) => {
 };
 
 export const changeMarkerStep = (step = 1) => {
-    return {
-        type: actionTypes.marker.CHANGE_STEP,
-        step: step,
+    return (dispatch, getState) => {
+        const state = getState();
+
+        dispatch({
+            type: actionTypes.marker.CHANGE_STEP,
+            step: step,
+            formErrors: state.marker.formErrors,
+        });
     }
 };
 
@@ -39,5 +44,19 @@ export const requestMarkerUpdate = (direction) => {
             step: state.marker.step,
             direction: direction,
         });
+    }
+};
+
+export const checkMarkerErrors = (check = false) => {
+    return {
+        type: actionTypes.marker.CHECK_ERRORS,
+        check: check,
+    }
+};
+
+export const setMarkerFormErrors = (errorsObject = null) => {
+    return {
+        type: actionTypes.marker.SET_FORM_ERRORS,
+        errorsObject: errorsObject,
     }
 };

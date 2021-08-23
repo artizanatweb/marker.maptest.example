@@ -4,6 +4,8 @@ const initialState = {
     object: null,
     step: 1,
     loading: false,
+    formErrors: null,
+    checkErrors: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,6 +24,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 step: action.step,
+                checkErrors: false,
+            }
+        case actionTypes.marker.CHECK_ERRORS:
+            return {
+                ...state,
+                checkErrors: action.check,
+            }
+        case actionTypes.marker.SET_FORM_ERRORS:
+            return {
+                ...state,
+                formErrors: action.errorsObject,
             }
         default:
             return state;

@@ -55,6 +55,7 @@ function createFormData(action, actionType = "create") {
 export function* saveMapSettingsSaga(action) {
     yield put(storeActions.setMapLoading(true));
     yield put(storeActions.setMarkerObject(null));
+    yield put(storeActions.setMarkerLoading(true));
 
     let actionType = "create";
     let apiPath = paths.map.create;
@@ -82,7 +83,6 @@ export function* saveMapSettingsSaga(action) {
 
 function* responseActionReceived(isError, responseObject, actionType = "create") {
     let serverMessage = responseObject?.data?.message ?? "Server response error!";
-    yield put(storeActions.setMapLoading(false));
 
     if (isError) {
         yield put(storeActions.setMainMessage('error', serverMessage));
@@ -93,10 +93,14 @@ function* responseActionReceived(isError, responseObject, actionType = "create")
             yield put(storeActions.checkMapErrors(true));
         }
 
+        yield put(storeActions.setMarkerLoading(false));
+        yield put(storeActions.setMapLoading(false));
         return;
     }
 
     if (!responseObject?.data?.success) {
+        yield put(storeActions.setMapLoading(false));
+        yield put(storeActions.setMarkerLoading(false));
         return yield put(storeActions.setMainMessage('error', serverMessage));
     }
 
@@ -104,6 +108,8 @@ function* responseActionReceived(isError, responseObject, actionType = "create")
 
     const responseMap = responseObject?.data?.data;
     if (!responseMap) {
+        yield put(storeActions.setMarkerLoading(false));
+        yield put(storeActions.setMapLoading(false));
         return yield put(storeActions.setMainMessage('error', "Map response is missing!"));
     }
 
@@ -113,6 +119,10 @@ function* responseActionReceived(isError, responseObject, actionType = "create")
         // store id in web storage
         localStorage.setItem("map_id", responseMap.id);
     }
+
+    yield delay(1000);
+    yield put(storeActions.setMapLoading(false));
+    yield put(storeActions.setMarkerLoading(false));
 }
 
 function* setMapWithMarker(map) {

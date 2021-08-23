@@ -5,6 +5,8 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
         super(scene, scene.cameras.main.centerX, scene.cameras.main.centerY, 'pinMarkerImage');
 
         this.scene = scene;
+        this.obtainX.bind(this);
+        this.obtainY.bind(this);
 
         this.setOrigin(0.5, 0.5);
 
@@ -23,6 +25,8 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
         this.markerListener();
 
         this.loadingListener();
+
+        this.moveTween.bind(this);
     }
 
     update([time, delta]) {
@@ -33,8 +37,10 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
 
     markerListener() {
         this.scene.game.emitter.on("marker", (markerObject) => {
-            this.setX(this.obtainX(markerObject.x));
-            this.setY(this.obtainY(markerObject.y));
+            let targetY = this.obtainY(markerObject.y);
+            let targetX = this.obtainX(markerObject.x);
+
+            this.moveTween(targetY, targetX);
         });
     }
 
@@ -57,12 +63,12 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
 
         let y = this.scene.cameras.main.height - objY;
 
-        if (0 >= (objY - this.displayHeight)) {
-            y -= this.displayHeight / 2;
+        if (0 >= (y - this.displayHeight / 2)) {
+            y += this.displayHeight / 2;
         }
 
-        if (this.scene.cameras.main.height <= (objY + this.displayHeight)) {
-            y += this.displayHeight / 2;
+        if (this.scene.cameras.main.height <= (y + this.displayHeight / 2)) {
+            y -= this.displayHeight / 2;
         }
 
         return y;
@@ -71,15 +77,25 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
     obtainX(objX) {
         let x = parseInt(objX);
 
-        if (0 >= (objX - this.displayWidth)) {
+        if (0 >= (x - this.displayWidth / 2)) {
             x += this.displayWidth / 2;
         }
 
-        if (this.scene.cameras.main.width <= (objX + this.displayWidth)) {
+        if (this.scene.cameras.main.width <= (x + this.displayWidth / 2)) {
             x -= this.displayWidth / 2;
         }
 
         return x;
+    }
+
+    moveTween(targetY, targetX) {
+        this.scene.tweens.add({
+            targets: this,
+            y: targetY,
+            x: targetX,
+            duration: 500,
+            ease: Phaser.Math.Easing.Sine.InOut,
+        });
     }
 }
 

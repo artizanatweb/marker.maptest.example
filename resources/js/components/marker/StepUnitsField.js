@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -20,6 +20,27 @@ const StepUnitsField = (props) => {
     const dispatch = useDispatch();
     const marker = useSelector( state => state.marker );
     const fieldRef = useRef(null);
+    const defaultFieldState = {
+        error: false,
+        message: "step units for movement; min: 1, max: 200",
+    };
+    const [fieldState, setFieldState] = useState(defaultFieldState);
+
+    useEffect(() => {
+        if (!marker.checkErrors) {
+            setFieldState(defaultFieldState);
+            return;
+        }
+
+        if (marker.formErrors.hasOwnProperty("step")) {
+            fieldRef.current.focus();
+
+            setFieldState({
+                error: true,
+                message: marker.formErrors.step,
+            })
+        }
+    }, [marker.checkErrors]);
 
     const stepValueHandler = (event) => {
         let fieldValue = event.target.value;
@@ -32,11 +53,6 @@ const StepUnitsField = (props) => {
         min: 0,
         max: 200,
     };
-
-    const fieldState = {
-        error: false,
-        message: "step units for movement; min: 1, max: 200",
-    }
 
     return (
         <div className={clsx("markerStepUnitsSupport", "mapForm")}>

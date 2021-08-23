@@ -68,7 +68,7 @@ const MapScreen = (props) => {
     }, [marker.object]);
 
     useEffect(() => {
-        if (!marker.object) {
+        if (!emitter) {
             return;
         }
 
