@@ -1,0 +1,160 @@
+// Fonts
+@import "~typeface-roboto/index.css";
+
+// Variables
+@import 'variables';
+
+body {
+    * {
+        font-family: "Roboto";
+    }
+}
+
+#page {
+    width: 100vw;
+    height: 100vh;
+    min-width: 320px;
+    overflow-y: auto;
+}
+
+.mapFormSupport {
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+
+    .mapFormPlace {
+        overflow: hidden;
+        max-width: 850px;
+
+        .title {
+            h1 {
+                text-transform: uppercase;
+                font-weight: 500;
+                font-size: 0.96rem;
+            }
+        }
+
+        .body {
+            padding-top: 20px;
+
+            .mapForm {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                flex-wrap: wrap;
+
+                @media screen and (min-width: 610px) {
+                    flex-direction: row;
+                }
+
+                @media screen and (min-width: 900px) {
+                    justify-content: space-between;
+                }
+            }
+
+            .formRow {
+                min-width: 240px;
+
+                label {
+                    text-transform: uppercase;
+                }
+
+                &.buttonRow {
+                    display: flex;
+                    justify-content: flex-end;
+                    flex-direction: column;
+                }
+            }
+        }
+
+        &.markerFormPlace {
+            .body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                @media screen and (min-width: 610px) {
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-top: 30px;
+                    padding-bottom: 30px;
+
+                    .markerControlButtonsSupport {
+                        width: auto;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.markerControlButtonsSupport {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 20px;
+
+    .controlRow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.middle {
+            .empty {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 76px;
+                height: 50px;
+
+                svg {
+                    height: 40px;
+                    width: 40px;
+                }
+            }
+        }
+
+        .directionButton {
+            .MuiButton-startIcon {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.spinIcon {
+    animation: iconRotation 1s infinite linear;
+}
+
+@keyframes iconRotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-359deg);
+    }
+}
+
+.mapSupport {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .mapGame {
+        display: flex;
+        align-content: center;
+        justify-items: center;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        min-width: 100%;
+        max-width: 100%;
+
+        canvas {
+            margin: 0 !important;
+        }
+    }
+}
