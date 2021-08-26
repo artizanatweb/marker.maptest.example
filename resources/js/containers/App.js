@@ -9,6 +9,7 @@ import MapSettings from "./../components/map/MapSettings";
 import MainMessage from "./../components/MainMessage";
 import MapScreen from "./../components/map/MapScreen";
 import MarkerSettings from "./../components/marker/MarkerSettings";
+import MarkerPosition from "../components/marker/MarkerPosition";
 
 function App(props) {
     const dispatch = useDispatch();
@@ -41,7 +42,10 @@ function App(props) {
                 <Container>
                     <MapSettings />
                     <MapScreen />
-                    <MarkerSettings />
+                    <div className={"markerArea"}>
+                        <MarkerPosition />
+                        <MarkerSettings />
+                    </div>
                 </Container>
             </div>
             <MainMessage />
