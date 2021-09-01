@@ -46,6 +46,8 @@ class MapGame extends Phaser.Game {
             this.renderer.resize(width, height);
 
             this.canvas.style.margin = 0;
+
+            this.emitter.emit("resized");
         });
     }
 }

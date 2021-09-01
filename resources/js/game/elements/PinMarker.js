@@ -1,6 +1,11 @@
 import Phaser from "phaser";
 
 class PinMarker extends Phaser.Physics.Arcade.Sprite {
+    minY = 0;
+    maxY = 0;
+    minX = 0;
+    maxX = 0;
+
     constructor(scene) {
         super(scene, scene.cameras.main.centerX, scene.cameras.main.centerY, 'pinMarkerImage');
 
@@ -9,6 +14,9 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
         this.obtainY.bind(this);
 
         this.setOrigin(0.5, 0.5);
+
+        this.setMinMaxY();
+        this.setMinMaxX();
 
         let x = this.obtainX(scene.game.markerObject.x);
         let y = this.obtainY(scene.game.markerObject.y);
@@ -25,6 +33,8 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
         this.markerListener();
 
         this.loadingListener();
+
+        this.resizeListener();
 
         this.moveTween.bind(this);
     }
@@ -55,6 +65,15 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
             this.loading = false;
             this.setFrame(0);
             this.setAngle(0);
+            this.setAngle(0);
+        });
+    }
+
+    resizeListener() {
+        this.scene.game.emitter.on("resized", () => {
+            this.setMinMaxY();
+            this.setMinMaxX();
+
         });
     }
 
@@ -63,12 +82,12 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
 
         let y = this.scene.cameras.main.height - objY;
 
-        if (0 >= (y - this.displayHeight / 2)) {
-            y += this.displayHeight / 2;
+        if (y < this.minY) {
+            return this.minY;
         }
 
-        if (this.scene.cameras.main.height <= (y + this.displayHeight / 2)) {
-            y -= this.displayHeight / 2;
+        if (y > this.maxY) {
+            return this.maxY
         }
 
         return y;
@@ -77,12 +96,12 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
     obtainX(objX) {
         let x = parseInt(objX);
 
-        if (0 >= (x - this.displayWidth / 2)) {
-            x += this.displayWidth / 2;
+        if (x < this.minX) {
+            return this.minX;
         }
 
-        if (this.scene.cameras.main.width <= (x + this.displayWidth / 2)) {
-            x -= this.displayWidth / 2;
+        if (x > this.maxX) {
+            return this.maxX;
         }
 
         return x;
@@ -96,6 +115,16 @@ class PinMarker extends Phaser.Physics.Arcade.Sprite {
             duration: 500,
             ease: Phaser.Math.Easing.Sine.InOut,
         });
+    }
+
+    setMinMaxY() {
+        this.minY = parseInt(this.displayHeight / 2);
+        this.maxY = parseInt(this.scene.cameras.main.height - this.displayHeight / 2);
+    }
+
+    setMinMaxX() {
+        this.minX = parseInt(this.displayWidth / 2);
+        this.maxX = parseInt(this.scene.cameras.main.width - this.displayWidth / 2);
     }
 }
 
